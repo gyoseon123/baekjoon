@@ -1,9 +1,19 @@
-t = int(input())
-for i in range(t):
+import sys
+input = sys.stdin.readline
+
+def solve():
     n,k = map(int, input().split())
-    time_to_build = list(map(int, input().split()))
-    graph = [[] for _ in range(k)]
+    Di = list(map(int, input().split()))
     for i in range(k):
         x,y = map(int, input().split())
-        graph[x].append(y)
-    goal = int(input())
+        w = int(input())
+        
+
+
+
+
+
+
+t = int(input())
+for i in range(t):
+    solve()
