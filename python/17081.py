@@ -16,7 +16,7 @@ player_info = {
     'NOW_HP':20, 
     'ATT':2, 
     'DEF':2,
-     'EXP':0
+    'EXP':0
 } # 플레이어 정보
 
 player_item = {
@@ -42,7 +42,7 @@ for i in range(n):  #월드맵 입력받기
     for j in range(m):
         if line[j] == '@':
             player_location = [i,j] # 플레이어 위치 
-            line[j] = '.'
+            line[j] = '.' #빈칸처리
         if line[j] == '&':
             monster_cnt += 1
         if line[j] == 'B':
@@ -121,6 +121,7 @@ def monster():
             player_info['EXP'] += get_exp
         return 'continue'
     else: # 플레이어 사망
+        player_info['NOW_HP'] = 0
         if player_item['RE']: # RE 장신구 - 사망시 최대체력 부활, 첫 시작위치로 이동
             player_item['RE'] = False
             player_item['item_count'] -= 1
@@ -139,10 +140,10 @@ def item():
     now_locate = (player_location[0], player_location[1])
     type,s = item_info[now_locate]
     if type == 'W':
-        player_info['ATT'] += s - player_item['sword']
+        player_info['ATT'] += (s - player_item['sword']) #얻은 무기의 공격력 - 현재 착용중인무기의 공격력을 추가
         player_item['sword'] = s
     if type == 'A':
-        player_info['DEF'] += s - player_item['armor']
+        player_info['DEF'] += (s - player_item['armor'])
         player_item['armor'] = s
     if type == 'O':
         if player_item['item_count'] < 4 and not player_item[s]:
@@ -199,7 +200,8 @@ def boss():
             if monster_hp <= 0:
                 monster_death = True
                 break
-            player_hp -= max(1, monster_att - player_def)
+            if not player_item['HU']:
+                player_hp -= max(1, monster_att - player_def)
             if player_hp <= 0:
                 break
         else:
@@ -214,7 +216,7 @@ def boss():
     if monster_death:
         if player_item['HR']: # HR 장신구 - 전투승리시 체력 3 회복
             player_info['NOW_HP'] = min(player_info['MAX_HP'], player_info['NOW_HP'] + 3)
-        world_map[player_location[0]][player_location[1]] = '.'
+        world_map[player_location[0]][player_location[1]] = '@'
         if player_item['EX']: # EX 장신구 - 얻는 경험치 1.2배 소수점 버림
             get_exp = int(monster_info[now_locate][4] * 1.2)
         else:
@@ -234,6 +236,7 @@ def boss():
         print('YOU WIN!')
         return 'gameover'
     else:
+        player_info['NOW_HP'] = 0
         if player_item['RE']: # RE 장신구 - 사망시 최대체력 부활, 첫 시작위치로 이동
             player_item['RE'] = False
             player_item['item_count'] -= 1
@@ -263,11 +266,13 @@ def game():
     return state
 
 def game_end():
+    for i in world_map:
+        print(*i, sep='')
     print(f'Passed Turns : {turn_count}')
     print(f'LV : {player_info["LV"]}')
     print(f'HP : {player_info["NOW_HP"]}/{player_info["MAX_HP"]}')
-    print(f'ATT : {player_info["ATT"]-player_item["sword"]}+{player_item["sword"]}')
-    print(f'DEF : {player_info["DEF"]-player_item["armor"]}+{player_item["armor"]}')
+    print(f'ATT : {player_info["LV"]*2}+{player_item["sword"]}')
+    print(f'DEF : {player_info["LV"]*2}+{player_item["armor"]}')
     print(f'EXP : {player_info["EXP"]}/{player_info["LV"]*5}')
 
 
@@ -289,5 +294,6 @@ for move in player_move:
     if game_state == 'gameover':
         break
 else:
+    world_map[player_location[0]][player_location[1]] = '@'
     game_end()
     print('Press any key to continue.')
