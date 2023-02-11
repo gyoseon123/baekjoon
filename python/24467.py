@@ -2,10 +2,10 @@ import sys
 input = sys.stdin.readline
 yut_count = 0
 location = 0
-sig_0 = True # 기본상태
-sig_1 = False # 오른쪽 위
-sig_2 = False # 왼쪽 위
-sig_3 = False # 중간
+sig_0 = True  # 기본상태
+sig_1 = False  # 오른쪽 위
+sig_2 = False  # 왼쪽 위
+sig_3 = False  # 중간
 result = False
 while yut_count < 10:
     s = input().rstrip()

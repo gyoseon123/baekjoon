@@ -1,7 +1,1 @@
-def test(n):
-    if n == 0:
-        return
-    print(n)
-    test(n-1)
-
-test(10)
+print( int("01") == int( "1"))

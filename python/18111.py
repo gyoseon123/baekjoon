@@ -1,11 +1,13 @@
 import sys
 input = sys.stdin.readline
-n,m,b = map(int, input().split())
+n, m, b = map(int, input().split())
 graph = [list(map(int, input().split())) for _ in range(n)]
 inven = b
 result = []
 least = 1e9
 index = 0
+
+
 def check_block(target):
     global least
     global index
@@ -22,7 +24,6 @@ def check_block(target):
     if out + inven >= put and cost <= least:
         index = target
         least = cost
-
 
 
 for i in range(257):
