@@ -1,46 +1,84 @@
+# from collections import deque      3차원 배열 풀이
+# import sys
+# input = sys.stdin.readline
+# n,m = map(int, input().split())
+# graph = [[] for _ in range(n)]
+# for i in range(n):
+#     l = list(input().rstrip())
+#     for j in l:
+#         graph[i].append([j,j])
+
+# dx = [0,1,0,-1]
+# dy = [1,0,-1,0]
+
+# def bfs():
+#     q = deque()
+#     visited = [[[False,False] for _ in range(m)] for _ in range(n)]
+#     q.append((0,0,0,1))
+#     visited[0][0][0] = True
+#     while q:
+#         x,y,is_break,dis = q.popleft()
+#         for i in range(4):
+#             nx = x + dx[i]
+#             ny = y + dy[i]
+#             if nx >= 0 and nx < n and ny >= 0 and ny < m:
+#                 if is_break == 0:
+#                     if graph[nx][ny][0] == '1' and not visited[nx][ny][1]:
+#                         visited[nx][ny][1] = True
+#                         q.append((nx,ny,1,dis+1))
+#                     if graph[nx][ny][0] == '0' and not visited[nx][ny][0]:
+#                         visited[nx][ny][0] = True
+#                         q.append((nx,ny,0,dis+1))
+#                 else:
+#                     if not visited[nx][ny][1] and graph[nx][ny][1] == '0':
+#                         visited[nx][ny][1] = True
+#                         q.append((nx,ny,1,dis+1))
+#         if x == n-1 and y == m-1:
+#             return dis
+
+# result = bfs()
+# if result:
+#     print(result)
+# else:
+#     print(-1)        
+
 from collections import deque
 import sys
 input = sys.stdin.readline
 n,m = map(int, input().split())
-graph = [list(map(int, list(input().rstrip()))) for _ in range(n)]
-dx = [1,0,-1,0]
-dy = [0,1,0,-1]
-break_wall = []
-for i in range(n):
-    for j in range(m):
-        cnt = 0
-        if graph[i][j] == 1:
-            for k in range(4):
-                nx = i + dx[k]
-                ny = j + dy[k]
-                if nx >= 0 and nx < n and ny >= 0 and ny < m and graph[nx][ny] == 0:
-                    cnt += 1
-            if cnt >= 2:
-                break_wall.append((i,j))
+graph = [list(input().rstrip()) for _ in range(n)]
+dx = [0,1,0,-1]
+dy = [1,0,-1,0]
 
 def bfs():
     q = deque()
-    q.append((0,0,-1))
-    graph[0][0] = -1
+    visited = [[[False,False] for _ in range(m)] for _ in range(n)]
+    visited[0][0][0] = True
+    q.append((0,0,1))
     while q:
-        x,y,d = q.popleft()
+        x,y,dis = q.popleft()
         for i in range(4):
             nx = x + dx[i]
             ny = y + dy[i]
-            if nx >= 0 and nx < n and ny >= 0 and ny < m and graph[nx][ny] == 0:
-                graph[nx][ny] = d-1
-                q.append((nx,ny,d-1))
+            if nx >= 0 and nx < n and ny >= 0 and ny < m:
+                if visited[x][y][1] == False: #벽 안부숨
+                    if graph[nx][ny] == '0' and not visited[nx][ny][0]:
+                        visited[nx][ny][0] = True
+                        q.append((nx,ny,dis+1))
+                    if graph[nx][ny] == '1' and not visited[nx][ny][1]:
+                        visited[nx][ny][0] = True
+                        visited[nx][ny][1] = True
+                        q.append((nx,ny,dis+1))
+                else: #벽 부숨
+                    if graph[nx][ny] == '0' and not visited[nx][ny][0]:
+                        visited[nx][ny][0] = True
+                        visited[nx][ny][1] = True
+                        q.append((nx,ny,dis+1))
+        if x == n-1 and y == m-1:
+            print(dis)
+            return
 
-result = []
-
-for x,y in break_wall:
-    temp = [i[:] for i in graph]
-    graph[x][y] = 0
-    bfs()
-    if graph[n-1][m-1] != 0:
-        result.append(-graph[n-1][m-1])
-    graph = [i[:] for i in temp]
-if not result:
-    print(-1)
-else:
-    print(min(result))
+                    
+result = bfs()
+print(result if result else -1)
+    
