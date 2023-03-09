@@ -6,6 +6,7 @@
         "istream": "cpp",
         "cstdlib": "cpp",
         "vector": "cpp",
-        "iosfwd": "cpp"
+        "iosfwd": "cpp",
+        "xiosbase": "cpp"
     }
 }
