@@ -1,40 +1,36 @@
+from collections import deque
 import sys
 input = sys.stdin.readline
-n = int(input())
-if n == 1:
-    print(0)
-    exit()
-    
-tree = list(map(int, input().split()))
-delete = int(input())
-visited = [False]*n
-graph = [[] for _ in range(n)]
-for i in range(n):
-    node = tree[i]
-    if node == -1:
-        root = i
-        continue
-    else:
-        graph[node].append(i)
 
-for l in graph:
-    if delete in l:
-        l.remove(delete)
+n,m = map(int, input().split())
+graph = [list(map(int, input().split())) for _ in range(n)]
+result = []
+dx = [1,0,-1,0]
+dy = [0,1,0,-1]
 
-cnt = 0
-def dfs(v):
+def bfs(x,y):
     global cnt
-    visited[v] = True
-    if len(graph[v]) == 0:
-        cnt += 1
-        return 
-    for node in graph[v]:
-        if not visited[node]:
-            dfs(node)
-if root == delete:
-    print(0)
-    exit()
-dfs(root)
-print(cnt)
-    
+    graph[x][y] = 0
+    cnt += 1
+    q = deque()
+    q.append((x,y))
+    while q:
+        x,y = q.popleft()
+        for i in range(4):
+            nx = x + dx[i]
+            ny = y + dy[i]
+            if nx >= 0 and nx < n and ny >= 0 and ny < m and graph[nx][ny] == 1:
+                graph[nx][ny] = 0
+                cnt += 1
+                q.append((nx,ny))
 
+for i in range(n):
+    for j in range(m):
+        if graph[i][j] == 1:
+            cnt = 0 
+            bfs(i,j)
+            result.append(cnt)
+if not result:
+    print(0,0, sep='\n')
+else:
+    print(len(result), max(result), sep='\n')
