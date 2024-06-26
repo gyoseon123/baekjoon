@@ -33,12 +33,16 @@ def prime_num(x):
 
 def prime_list(x):
     p = [True] * x
+    p[0] = False
+    p[1] = False
+    
     for i in range(2,int(math.sqrt(x))+1):
         if p[i] == True:
             for j in range(i+i,x,i):
                 p[j] = False
-    return [i for i in range(2,x) if p[i] == True]
+    return p
 
+print(prime_list(100))
 
 
 
