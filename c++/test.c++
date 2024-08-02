@@ -1,119 +1,71 @@
 #include <iostream>
 #include <vector>
-#include <set>
+#include <algorithm>
+#include <limits>
+
 using namespace std;
 
-vector<vector<int>> sudoku;
+const long long INF = 1e12;
+vector<vector<int>> graph;
+vector<int> a;
+vector<bool> visited;
 
-bool row(int y) {
-    int cnt = 0;
-    set<int> nums;
-    for (int i = 0; i < 9; i++) {
-        if (sudoku[y][i] == 0) {
-            cnt += 1;
-        }
-        else {
-            nums.insert(sudoku[y][i]);
-        }
-    }
+long long dfs(int now, int val) {
+    visited[now] = true;
 
-    if (nums.size() + cnt == 9) {
-        return true;
-    }
-    return false;
-}
-
-bool column(int x) {
-    int cnt = 0;
-    set<int> nums;
-    for (int i = 0; i < 9; i++) {
-        if (sudoku[i][x] == 0) {
-            cnt += 1;
-        }
-        else {
-            nums.insert(sudoku[i][x]);
+    long long ret = INF;
+    for (int next : graph[now]) {
+        if (!visited[next]) {
+            ret = min(ret, dfs(next, a[next - 1]));
         }
     }
 
-    if (nums.size() + cnt == 9) {
-        return true;
-    }
-    return false;
-}
-
-int dx[9] = {0,0,0,1,1,1,2,2,2};
-int dy[9] = {0,1,2,0,1,2,0,1,2};
-bool block(int x, int y) {
-    x = (x/3)*3;
-    y = (y/3)*3;
-    int cnt = 0;
-    set<int> num;
-    for (int i = 0; i < 9; i++) {
-        int nx = x + dx[i];
-        int ny = y + dy[i];
-        if (sudoku[nx][ny] == 0) {
-            cnt += 1;
-        }
-        else {
-            num.insert(sudoku[nx][ny]);
+    if (now == 1) {
+        if (ret == INF) {
+            return val;
+        } else {
+            return val + ret;
         }
     }
 
-    if (num.size() + cnt == 9) {
-        return true;
-    }
-    return false;
-}
-
-vector<pair<int, int>> blank;
-int mc = 0;
-
-void f(int cnt) {
-    mc = max(mc, cnt);
-    if (cnt == blank.size()) {
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                cout << sudoku[i][j] << " ";
-            }
-            cout << endl;
-        }
-        exit(0);
+    if (ret == INF) {
+        return val;
     }
 
-    int x = blank[cnt].first;
-    int y = blank[cnt].second;
-    for (int i = 1; i <= 9; i++) {
-        sudoku[x][y] = i;
-        if (row(x) && column(y) && block(x, y)) {
-            f(cnt + 1);
-        }
-        sudoku[x][y] = 0;
+    if (ret > val) {
+        return val + (ret - val) / 2;
+    } else {
+        return ret;
     }
 }
 
 int main() {
-    sudoku.resize(9, vector<int>(9));
+    ios::sync_with_stdio(false);
+    cin.tie(0);
 
-    for (int i = 0; i < 9; i++) {
-        for (int j = 0; j < 9; j++) {
-            cin >> sudoku[i][j];
-        }
-    }
+    int t;
+    cin >> t;
 
-    for (int i = 0; i < 9; i++) {
-        for (int j = 0; j < 9; j++) {
-            if (sudoku[i][j] == 0) {
-                blank.push_back(make_pair(i, j));
-            }
-        }
-    }
+    while (t--) {
+        int n;
+        cin >> n;
 
-    f(0);
-    for (int i = 0; i < 9; i++) {
-        for (int j = 0; j < 9; j++) {
-            cout << sudoku[i][j] << " ";
+        a.resize(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
         }
-        cout << endl;
+
+        graph.assign(n + 10, vector<int>());
+        visited.assign(n + 10, false);
+
+        vector<int> p(n - 1);
+        for (int i = 0; i < n - 1; ++i) {
+            cin >> p[i];
+            graph[p[i]].push_back(i + 2);
+            graph[i + 2].push_back(p[i]);
+        }
+
+        cout << dfs(1, a[0]) << endl;
     }
 
     return 0;

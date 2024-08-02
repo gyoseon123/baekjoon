@@ -1,39 +1,40 @@
 import sys
 input = sys.stdin.readline
 
-r,c = map(int, input().split())
-n = int(input())
-h = list(map(int, input().split()))
+def check(h):
+    if n == 1:
+        return 0
+    
+    ret = 0
+    for i in range(n):
+        if i == 0:
+            if abs(l[1] - l[0]) > h:
+                ret += 1
+        elif i == n-1:
+            if abs(l[n-1] - l[n-2]) > h:
+                ret += 1
+        else:
+            if abs(l[i] - l[i-1]) > h or abs(l[i+1] - l[i]) > h:
+                ret += 1
+    
+    return ret
 
-board = [[0]*c for _ in range(r)]
 
-h.sort(reverse=True)
 
-cnt = 0
+n,k = map(int, input().split())
+l = list(map(int, input().split()))
 
-for i in range(r):
-    for j in range(c):
-        while i > 0 and cnt < n and board[i-1][j] == h[cnt]:
-            cnt += 1
-        
-        if cnt == n:
-                break
+left = -1
+right = int(1e9)+7
 
-        board[i][j] = h[cnt]
-        cnt += 1
+while left + 1 < right:
+    mid = (left+right)//2
 
-        if cnt == n:
-            break
+    if check(mid) <= k:
+        right = mid
     else:
-        continue
-    break
+        left = mid
 
-ans = 0
-for j in range(c):
-    for i in range(r-1, 0, -1):
-        if board[i-1][j] > board[i][j]:
-            ans += 1
+print(right)
 
-print(ans)
-        
 
