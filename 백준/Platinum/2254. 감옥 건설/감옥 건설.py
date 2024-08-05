@@ -27,9 +27,6 @@ def convex_hull():
         
     return (set(stk1)|set(stk2))
     
-    
-
-
 n,px,py = map(int, input().split())
 point = [tuple(map(int, input().split())) for _ in range(n)]
 point.append((px, py))
