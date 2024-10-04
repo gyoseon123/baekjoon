@@ -62,5 +62,4 @@ for case in range(t):
 
     if not dfs(0):
         print("Could not complete this grid.")
-    if case != t-1:
-        print()
+    print()
