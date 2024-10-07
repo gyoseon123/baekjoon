@@ -19,32 +19,22 @@ def update_q(node, start, end, idx, diff):
 n = int(input())
 a = list(map(int, input().split()))
 b = list(map(int, input().split()))
+bb = [0]*(n+1)
 tree = [0]*(4*n)
+
+for i in range(n):
+    bb[b[i]] = i
 
 arr = []
 for i in range(n):
-    arr.append((a[i], i))
+    arr.append((bb[a[i]], i))
 
 arr.sort()
-ans1 = 0
+ans = 0
 
 for i in range(n):
     now, idx = arr[i]
-    ans1 += sum_q(1, 0, n-1, idx+1, n-1)
+    ans += sum_q(1, 0, n-1, idx+1, n-1)
     update_q(1, 0, n-1, idx, 1)
     
-tree = [0]*(4*n)
-
-arr = []
-for i in range(n):
-    arr.append((b[i], i))
-
-arr.sort()
-ans2 = 0
-
-for i in range(n):
-    now, idx = arr[i]
-    ans2 += sum_q(1, 0, n-1, idx+1, n-1)
-    update_q(1, 0, n-1, idx, 1)
-    
-print("Impossible" if abs(ans1 - ans2)&1 else "Possible")
+print("Impossible" if ans&1 else "Possible")
