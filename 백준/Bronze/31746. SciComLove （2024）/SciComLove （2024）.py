@@ -1,0 +1,1 @@
+print("evoLmoCicS" if int(input())&1 else "SciComLove")
