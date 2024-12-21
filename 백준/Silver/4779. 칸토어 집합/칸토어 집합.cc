@@ -11,6 +11,8 @@
 
 using namespace std;
 
+int a[13];
+
 void sol(int n){
     if (n == 0){
         cout << '-';
@@ -18,7 +20,7 @@ void sol(int n){
     }
 
     sol(n-1);
-    for (int i = 0; i < (int)pow(3, n-1); i++){
+    for (int i = 0; i < a[n-1]; i++){
         cout << ' ';
     }
     sol(n-1);
@@ -28,6 +30,11 @@ int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
+
+    a[0] = 1;
+    for (int i = 1; i < 13; i++){
+        a[i] = a[i-1]*3;
+    }
 
     int n;
     
