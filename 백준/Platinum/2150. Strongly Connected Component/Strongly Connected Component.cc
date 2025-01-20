@@ -36,7 +36,7 @@ int dfs(int now){
 
     if (par == parent[now]){
         vector<int> scc;
-        while (now){
+        while (1){
             int next = stk.top();
             stk.pop();
             scc.push_back(next);
