@@ -20,38 +20,30 @@ signed main(){
 
     for (int i = 1; i < n; i++){
         int ret = 0;
-        int idx = -1;
         for (int j = 0; j < i; j++){
             if (a[j] < a[i] && ret < dp[j]){
                 ret = dp[j];
-                idx = j;
             }
         }
-        if (idx != -1){
-            dp[i] = ret+1;
-            trc[i] = idx;
-        }
+        dp[i] = ret+1;
     }
 
-    int ret = 0;
-    int idx = -1;
-    for (int i = 0; i < n; i++){
-        if (ret < dp[i]){
-            ret = dp[i];
-            idx = i;
-        }
-    }
-
+    int max_dp = *max_element(dp, dp+n);
+    cout << max_dp << '\n';
     vector<int> ans;
 
-    for (int i = idx; i != -1; i = trc[i]){
-        ans.push_back(a[i]);
+    int target = max_dp;
+    for (int i = n-1; i >= 0; i--){
+        if (dp[i] == target){
+            ans.push_back(a[i]);
+            target--;
+            if (target == 0) break;
+        }
     }
 
     reverse(ans.begin(), ans.end());
 
-    cout << ans.size() << '\n';
-    for (int i = 0; i < ans.size(); i++) cout << ans[i] << ' ';
-    
+    for (auto i : ans) cout << i << ' ';
+
     return 0;
 }
