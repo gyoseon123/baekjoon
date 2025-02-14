@@ -84,10 +84,8 @@ void Kth(int k){
     Lazy(x);
     k++;
     while (1){
-        while (x->l && x->l->sz > k){
-            x = x->l;
-            Lazy(x);
-        }
+        while (x->l && x->l->sz > k) x = x->l, Lazy(x);
+          
         if (x->l) k -= x->l->sz;
         if (!k--) break;
         x = x->r;
