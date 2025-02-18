@@ -149,7 +149,7 @@ void Init(int n){
     root = x;
     x->l = x->r = x->p = NULL;
     x->sz = 1;
-    x->value = -inf;
+    x->value = 0;
     x->inv = false;
     for (int i = 1; i <= n; i++){
         ptr[i] = x->r = new node;
@@ -165,7 +165,7 @@ void Init(int n){
     x = x->r;
     x->l = x->r = NULL;
     x->sz = 1;
-    x->value = inf;
+    x->value = 0;
     x->inv = false;
     for (int i = n; i >= 1; i--) Update(ptr[i]);
 }
