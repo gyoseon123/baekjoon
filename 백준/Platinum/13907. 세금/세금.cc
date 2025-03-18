@@ -24,7 +24,7 @@ void dijkstra(int start){
 
         for (auto [next, cst] : graph[now]){
             int cost = dist[now][cnt] + cst;
-            if (cost < dist[next][cnt+1]){
+            if (cost < dist[next][cnt+1] && cnt+1<n){
                 dist[next][cnt+1] = cost;
                 pq.push({cost, next, cnt+1});
             }
@@ -44,12 +44,8 @@ signed main(){
         graph[a].push_back({b,c});
         graph[b].push_back({a,c});
     }
-
-    for (int i = 0; i <= n; i++){
-        for (int j = 0; j <= n; j++){
-            dist[i][j] = inf;
-        }
-    }
+    
+    fill_n(&dist[0][0], 1010*1010, inf);
 
     dijkstra(s);
 
