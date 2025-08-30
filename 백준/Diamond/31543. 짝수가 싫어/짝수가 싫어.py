@@ -3,10 +3,11 @@ n,k = map(int, input().split())
 div = []
 
 x = 2
-while k > 1:
-    while (k%x == 0):
+kk = k
+while kk > 1:
+    while (kk%x == 0):
         div.append(x)
-        k //= x
+        kk //= x
     x += 1
 
 flg = 1
