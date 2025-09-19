@@ -19,7 +19,7 @@ struct Line{
 };
 
 ld cross(Point p1, Point p2, Point p3){return (p2.x - p1.x)*(p3.y - p1.y) - (p3.x - p1.x)*(p2.y - p1.y);}
-bool is_ccw(Point p1, Point p2, Point p3){return (p2.x - p1.x)*(p3.y - p1.y) - (p3.x - p1.x)*(p2.y - p1.y) >= -1e-9;}
+bool is_ccw(Point p1, Point p2, Point p3){return (p2.x - p1.x)*(p3.y - p1.y) - (p3.x - p1.x)*(p2.y - p1.y) >= 0;}
 bool is_equal(ld a, ld b){return abs(a - b) < 1e-9;}
 
 bool line_intersect(Line l1, Line l2, Point& p){
@@ -40,7 +40,7 @@ bool is_hide(Line a, Line b, Line c){
     Point p;
     if (!line_intersect(a, b, p)) return 0;
     ld crs = cross(c.s, c.t, p);
-    return (crs < 1e-9);
+    return (crs < 0);
 }
 
 ld find_area(vector<Point> points){
@@ -72,7 +72,7 @@ vector<Point> HPI(vector<Line> lines){
     sort(lines.begin(), lines.end(), [&](Line l1, Line l2){
         if (line_div(l1) != line_div(l2)) return line_div(l1) < line_div(l2);
         ld crs = (l1.t.x - l1.s.x) * (l2.t.y - l2.s.y) - (l1.t.y - l1.s.y) * (l2.t.x - l2.s.x);
-        if (!is_equal(crs, 0)) return crs > 1e-9;
+        if (!is_equal(crs, 0)) return crs > 0;
         return is_ccw(l1.s, l1.t, l2.s);
     });
 
