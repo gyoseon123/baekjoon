@@ -96,7 +96,7 @@ vector<Point> HPI(vector<Line> lines){
     for (int i = 0; i < lines.size(); i++){
         while (sz(dq) >= 2 && is_hide(dq[sz(dq)-2], dq[sz(dq)-1], lines[i])) dq.pop_back();
         while (sz(dq) >= 2 && is_hide(dq[0], dq[1], lines[i])) dq.pop_front();
-        dq.push_back(lines[i]);
+        if (sz(dq) < 2 || !is_hide(dq[sz(dq)-1], lines[i], dq[0])) dq.push_back(lines[i]);
     }
     
     while (sz(dq) >= 2 && is_hide(dq[sz(dq)-2], dq[sz(dq)-1], dq[0])) dq.pop_back();
