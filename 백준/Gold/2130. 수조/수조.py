@@ -7,7 +7,7 @@ def check(x):
         b, h, w, d = tank[i]
         if b >= x: continue
         ret += (min(b + h, x) - b) * w * d
-    return ret >= v
+    return ret < v
 
 n = int(input())
 tank = [list(map(int, input().split())) for _ in range(n)]
@@ -27,8 +27,7 @@ right = 1e9
 for _ in range(100):
     mid = (left+right)/2
     
-    if check(mid): right = mid
-    else: left = mid
+    if check(mid): left = mid
+    else: right = mid
 
-if right > 1e7: print("OVERFLOW")
-else: print(f"{right:.2f}")
+print(f"{right:.2f}")
