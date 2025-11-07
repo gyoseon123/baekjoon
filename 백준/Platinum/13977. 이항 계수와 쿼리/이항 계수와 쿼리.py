@@ -1,23 +1,26 @@
 import sys
 input = sys.stdin.readline
+mod = 1000000007
 
-MAX = 4000001
-mod = int(1e9) + 7
 
-fac = [0]*MAX
+def power(n,cnt):
+    if cnt == 1:
+        return n
+    
+    div = power(n,cnt//2)
+    if cnt&1:
+        return (div*div*n)%mod
+    else:
+        return (div*div)%mod
+    
+fac = [0]*(4000000+1)
 fac[0] = 1
-for i in range(1, MAX):
-    fac[i] = (fac[i-1] * i)%mod
+x = 1
+for i in range(1,4000000+1):
+    x = (x*i)%mod
+    fac[i] = x
 
-inv_fac = [0]*MAX
-inv_fac[MAX-1] = pow(fac[MAX-1], mod-2, mod)
-for i in range(MAX-2, -1, -1):
-    inv_fac[i] = (inv_fac[i+1] * (i+1))%mod
-
-def comb(n,k):
-    return (fac[n] * (inv_fac[k] * inv_fac[n-k])%mod)%mod
-
-t = int(input())
-for _ in range(t):
+m = int(input())
+for _ in range(m):
     n,k = map(int, input().split())
-    print(comb(n,k))
+    print((fac[n]*power((fac[n-k]*fac[k]),mod-2))%mod)
