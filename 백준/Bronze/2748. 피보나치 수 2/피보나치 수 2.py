@@ -1,9 +1,7 @@
-from functools import cache
-
-@cache
-def fibo(n):
-    if n == 0: return 0
-    if n == 1: return 1
-    return fibo(n-1) + fibo(n-2)
-
-print(fibo(int(input())))
+a,b = 0,1
+c = list()
+for i in range(91):
+    c.append(a)
+    a,b = b, a+b
+l = int(input())
+print(c[l])
